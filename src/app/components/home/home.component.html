@@ -1,0 +1,203 @@
+<main class="home-page">
+  <header class="home-header">
+    <div>
+      <h1 class="page-title">لوحة التحكم</h1>
+      <p class="home-sub">مرحباً بك مجدداً في متجر T4Tea</p>
+    </div>
+    <button type="button" class="btn btn-gold" (click)="openModal('add')">
+      <i class="fa fa-plus"></i> إضافة منتج جديد
+    </button>
+  </header>
+
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="icon-box"><i class="fa fa-leaf"></i></div>
+      <div>
+        <p class="label">إجمالي الشاي</p>
+        <h3 class="value">{{ teaCount }}</h3>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="icon-box"><i class="fa fa-coffee"></i></div>
+      <div>
+        <p class="label">أدوات الشاي</p>
+        <h3 class="value">{{ teawareCount }}</h3>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="icon-box"><i class="fa fa-money"></i></div>
+      <div>
+        <p class="label">قيمة المخزون</p>
+        <h3 class="value">
+          {{ totalSales | number }} <small>ج.م</small>
+        </h3>
+      </div>
+    </div>
+  </div>
+
+  <section class="table-container latest-products">
+    <div class="panel-head">
+      <div class="panel-head__main">
+        <div class="panel-titles">
+          <h4 class="panel-title">{{ isSearchMode ? 'نتائج البحث' : 'أحدث المنتجات' }}</h4>
+          <p class="panel-meta" *ngIf="isSearching">جاري البحث...</p>
+          <p class="panel-meta" *ngIf="isSearchMode && !isSearching">
+            {{ searchResults.length }} نتيجة لـ «{{ searchQuery }}»
+          </p>
+          <p class="panel-meta" *ngIf="!isSearchMode && teaCount">
+            عرض {{ latestItems.length }} من أصل {{ teaCount }}
+          </p>
+        </div>
+
+        <div class="search-bar">
+          <i class="fa fa-search" aria-hidden="true"></i>
+          <input
+            type="search"
+            [ngModel]="searchQuery"
+            (ngModelChange)="onSearchChange($event)"
+            placeholder="ابحث بالاسم أو الفئة..."
+          />
+          <button *ngIf="searchQuery" type="button" class="btn-clear" (click)="clearSearch()" title="مسح">
+            &times;
+          </button>
+        </div>
+      </div>
+
+      <a *ngIf="!isSearchMode" class="btn-view-all" routerLink="/dashboard/tea-pro">عرض الكل</a>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table custom-table align-middle mb-0">
+        <thead>
+          <tr>
+            <th>اسم المنتج</th>
+            <th>الفئة</th>
+            <th class="text-center">النوع</th>
+            <th>السعر</th>
+            <th class="text-center">الإجراءات</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="!isSearching && !displayedItems.length">
+            <td colspan="5" class="empty-msg">
+              {{ isSearchMode ? 'لا توجد نتائج مطابقة' : 'لا توجد منتجات بعد' }}
+            </td>
+          </tr>
+          <tr *ngFor="let item of displayedItems" class="table-row">
+            <td>
+              <div class="product-cell">
+                <div class="product-thumb">
+                  <img
+                    *ngIf="item.thumbUrl as img"
+                    [src]="img"
+                    [alt]="item.name"
+                    width="48"
+                    height="48"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <span *ngIf="!item.thumbUrl">{{ item.name.charAt(0) }}</span>
+                </div>
+                <span class="product-name">{{ item.name }}</span>
+              </div>
+            </td>
+            <td class="col-muted">{{ item.category || '—' }}</td>
+            <td class="text-center">
+              <span class="type-badge" [class.tea]="item.type === 'Tea'" [class.ware]="item.type !== 'Tea'">
+                {{ item.type === 'Tea' ? 'شاي' : 'أدوات' }}
+              </span>
+            </td>
+            <td class="col-price">{{ item.price }} ج.م</td>
+            <td>
+              <div class="actions">
+                <button type="button" class="btn-icon" (click)="openModal('edit', item)" title="تعديل">
+                  <i class="fa fa-pencil"></i>
+                </button>
+                <button type="button" class="btn-icon delete" (click)="onDelete(item)" title="حذف">
+                  <i class="fa fa-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<div class="custom-modal-overlay" *ngIf="isModalOpen" (click)="closeModal()">
+  <div class="custom-modal-content animate-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header-luxury">
+      <h3>{{ modalTitle }}</h3>
+      <button class="btn-close-custom" (click)="closeModal()">&times;</button>
+    </div>
+
+    <div class="modal-body-luxury">
+      <form #productForm="ngForm">
+        <div class="field-wrapper full-width">
+          <label class="form-label">اسم المنتج</label>
+          <input type="text" class="form-input-luxury" [(ngModel)]="currentItem.name" name="name" placeholder="مثلاً: شاي ملكي..">
+        </div>
+
+        <div class="field-wrapper full-width">
+          <label class="form-label">الوصف</label>
+          <textarea class="form-input-luxury" rows="2" [(ngModel)]="currentItem.description" name="description"
+            placeholder="وصف مختصر للمنتج"></textarea>
+        </div>
+
+        <div class="row-fields">
+          <div class="field-wrapper">
+            <label class="form-label">نوع المنتج</label>
+            <select class="form-select-luxury" [(ngModel)]="currentItem.type" name="type" (ngModelChange)="onTypeChange()">
+              <option value="Tea">شاي</option>
+              <option value="Teaware">أدوات مائدة</option>
+            </select>
+          </div>
+
+          <div class="field-wrapper">
+            <label class="form-label">الفئة</label>
+            <select class="form-select-luxury" [(ngModel)]="currentItem.categoryId" name="categoryId">
+              <option value="">اختر الفئة</option>
+              <option *ngFor="let cat of activeCategories" [ngValue]="cat.id">{{ cat.name }}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row-fields">
+          <div class="field-wrapper">
+            <label class="form-label">السعر (جنيه)</label>
+            <input type="number" class="form-input-luxury" [(ngModel)]="currentItem.price" name="price" min="0" step="0.01">
+          </div>
+
+          <div class="field-wrapper">
+            <label class="form-label">الخصم</label>
+            <input type="number" class="form-input-luxury" [(ngModel)]="currentItem.discount" name="discount" min="0" step="0.01">
+          </div>
+        </div>
+
+        <div class="field-wrapper full-width" *ngIf="currentItem.type === 'Tea'">
+          <label class="form-label">دليل التحضير</label>
+          <input type="text" class="form-input-luxury" [(ngModel)]="currentItem.brewingGuide" name="brewingGuide"
+            placeholder="مثلاً: 3 دقائق على 80 درجة">
+        </div>
+
+        <div class="field-wrapper full-width">
+          <app-image-dropzone
+            label="صور المنتج"
+            [images]="currentItem.imageUrls"
+            [multiple]="true"
+            [maxFiles]="8"
+            (imagesChange)="currentItem.imageUrls = $event"
+          ></app-image-dropzone>
+        </div>
+      </form>
+    </div>
+
+    <div class="modal-footer-luxury">
+      <button class="btn-save-luxury" (click)="saveItem()" [disabled]="isSaving">
+        {{ isSaving ? 'جاري الحفظ...' : (modalMode === 'add' ? 'إضافة للتشكيلة' : 'حفظ التعديلات') }}
+      </button>
+      <button class="btn-cancel-luxury" (click)="closeModal()" [disabled]="isSaving">إلغاء</button>
+    </div>
+  </div>
+</div>

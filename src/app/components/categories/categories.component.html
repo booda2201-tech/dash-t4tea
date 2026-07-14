@@ -1,0 +1,81 @@
+<div class="categories-page">
+  <div class="d-flex justify-content-between align-items-center mb-5 flex-wrap gap-3">
+    <div>
+      <h1 class="page-title">إدارة الفئات</h1>
+      <p class="text-muted mb-0">نظم أنواع الشاي المرتبطة بالمتجات</p>
+    </div>
+    <button class="btn btn-gold shadow-sm px-4" (click)="openModal('add')">
+      <i class="fa fa-plus ms-2"></i> إضافة فئة جديدة
+    </button>
+  </div>
+
+  <div class="loading-state" *ngIf="isLoading">
+    جاري تحميل الفئات...
+  </div>
+
+  <div class="empty-state" *ngIf="!isLoading && categories.length === 0">
+    <i class="fa fa-tags"></i>
+    <p>لا توجد فئات بعد</p>
+    <button class="btn btn-gold" (click)="openModal('add')">أضف أول فئة</button>
+  </div>
+
+  <div class="category-grid" *ngIf="!isLoading && categories.length > 0">
+    <div class="category-item shadow-sm" *ngFor="let cat of categories">
+      <div class="cat-main">
+        <div class="cat-avatar">{{ (cat.name || '?').charAt(0) }}</div>
+        <div class="cat-info">
+          <h3>{{ cat.name }}</h3>
+          <p class="cat-desc" *ngIf="cat.description">{{ cat.description }}</p>
+          <span class="cat-count">{{ cat.count || 0 }} منتج مسجل</span>
+        </div>
+      </div>
+
+      <div class="cat-actions d-flex gap-2">
+        <button type="button" class="btn-action edit" (click)="openModal('edit', cat)" title="تعديل">
+          <i class="fa fa-pencil"></i>
+        </button>
+        <button type="button" class="btn-action delete" (click)="deleteCategory(cat)" title="حذف">
+          <i class="fa fa-trash"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="custom-modal-overlay" *ngIf="isModalOpen" (click)="closeModal()">
+  <div class="custom-modal-content animate-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header-luxury">
+      <h3>{{ modalMode === 'add' ? 'إضافة فئة جديدة' : 'تعديل الفئة' }}</h3>
+      <button type="button" class="btn-close-custom" (click)="closeModal()">&times;</button>
+    </div>
+
+    <div class="modal-body-luxury">
+      <div class="field-wrapper">
+        <label class="form-label">اسم الفئة</label>
+        <input
+          type="text"
+          class="form-input-luxury"
+          [(ngModel)]="catForm.name"
+          placeholder="مثلاً: Black Tea"
+        />
+      </div>
+
+      <div class="field-wrapper">
+        <label class="form-label">الوصف</label>
+        <textarea
+          class="form-input-luxury"
+          rows="3"
+          [(ngModel)]="catForm.description"
+          placeholder="وصف مختصر للفئة (اختياري)"
+        ></textarea>
+      </div>
+    </div>
+
+    <div class="modal-footer-luxury">
+      <button class="btn-save-luxury shadow-sm" (click)="saveCategory()" [disabled]="isSaving">
+        {{ isSaving ? 'جاري الحفظ...' : (modalMode === 'add' ? 'إضافة الفئة' : 'حفظ التعديلات') }}
+      </button>
+      <button class="btn-cancel-luxury" (click)="closeModal()" [disabled]="isSaving">إلغاء</button>
+    </div>
+  </div>
+</div>

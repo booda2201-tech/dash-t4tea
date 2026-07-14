@@ -1,0 +1,144 @@
+<main class="teaware-page">
+  <header class="page-header">
+    <div>
+      <h1 class="page-title">أدوات الشاي</h1>
+      <p class="page-sub">إدارة الإكسسوارات والأواني · {{ teawareItems.length }} قطعة</p>
+    </div>
+    <button type="button" class="btn btn-gold" (click)="openModal('add')">
+      <i class="fa fa-plus"></i> إضافة أداة جديدة
+    </button>
+  </header>
+
+  <div class="toolbar">
+    <div class="search-bar">
+      <i class="fa fa-search" aria-hidden="true"></i>
+      <input
+        type="search"
+        [ngModel]="searchQuery"
+        (ngModelChange)="onSearchChange($event)"
+        placeholder="ابحث بالاسم أو الفئة..."
+      />
+      <button *ngIf="searchQuery" type="button" class="btn-clear" (click)="clearSearch()">&times;</button>
+    </div>
+    <span class="filter-meta" *ngIf="searchQuery">
+      {{ filteredItems.length }} نتيجة
+    </span>
+  </div>
+
+  <div class="table-container border-0">
+    <div class="table-responsive">
+      <table class="table custom-table align-middle mb-0">
+        <thead>
+          <tr>
+            <th>الأداة</th>
+            <th>الفئة</th>
+            <th>السعر</th>
+            <th>الخصم</th>
+            <th class="text-center">الإجراءات</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="isLoading">
+            <td colspan="5" class="empty-msg">جاري التحميل...</td>
+          </tr>
+          <tr *ngIf="!isLoading && !filteredItems.length">
+            <td colspan="5" class="empty-msg">
+              {{ searchQuery ? 'لا توجد نتائج مطابقة' : 'لا توجد أدوات بعد' }}
+            </td>
+          </tr>
+          <tr *ngFor="let item of filteredItems; trackBy: trackById" class="table-row">
+            <td>
+              <div class="item-cell">
+                <div class="product-thumb">
+                  <img
+                    *ngIf="item.thumbUrl"
+                    [src]="item.thumbUrl"
+                    [alt]="item.name"
+                    width="48"
+                    height="48"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <span *ngIf="!item.thumbUrl"><i class="fa fa-coffee"></i></span>
+                </div>
+                <span class="item-name">{{ item.name }}</span>
+              </div>
+            </td>
+            <td class="col-muted">{{ item.categoryName || '—' }}</td>
+            <td class="col-price">{{ item.price }} ج.م</td>
+            <td class="col-muted">{{ item.discount || 0 }} ج.م</td>
+            <td>
+              <div class="actions">
+                <button type="button" class="btn-action edit" (click)="openModal('edit', item)" title="تعديل">
+                  <i class="fa fa-pencil"></i>
+                </button>
+                <button type="button" class="btn-action delete" (click)="deleteItem(item)" title="حذف">
+                  <i class="fa fa-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>
+
+<div class="custom-modal-overlay" *ngIf="isModalOpen" (click)="closeModal()">
+  <div class="custom-modal-content animate-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header-luxury">
+      <h3>{{ modalMode === 'add' ? 'إضافة قطعة جديدة' : 'تعديل بيانات القطعة' }}</h3>
+      <button class="btn-close-custom" (click)="closeModal()">&times;</button>
+    </div>
+
+    <div class="modal-body-luxury">
+      <div class="field-wrapper mb-3">
+        <label class="form-label">اسم الأداة</label>
+        <input type="text" class="form-input-luxury" [(ngModel)]="itemModel.name">
+      </div>
+
+      <div class="field-wrapper mb-3">
+        <label class="form-label">الوصف</label>
+        <textarea class="form-input-luxury" rows="2" [(ngModel)]="itemModel.description"></textarea>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 field-wrapper">
+          <label class="form-label">التصنيف</label>
+          <select class="form-input-luxury" [(ngModel)]="itemModel.categoryId">
+            <option value="">اختر التصنيف</option>
+            <option *ngFor="let cat of categories" [ngValue]="cat.id">{{ cat.name }}</option>
+          </select>
+        </div>
+        <div class="col-md-6 field-wrapper">
+          <label class="form-label">السعر (ج.م)</label>
+          <input type="number" class="form-input-luxury" [(ngModel)]="itemModel.price" min="0" step="0.01">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 field-wrapper">
+          <label class="form-label">الخصم</label>
+          <input type="number" class="form-input-luxury" [(ngModel)]="itemModel.discount" min="0" step="0.01">
+        </div>
+      </div>
+
+      <div class="field-wrapper mb-3">
+        <app-image-dropzone
+          label="صور الأداة"
+          [images]="itemModel.imageUrls"
+          [multiple]="true"
+          [maxFiles]="8"
+          (imagesChange)="itemModel.imageUrls = $event"
+        ></app-image-dropzone>
+      </div>
+    </div>
+
+    <div class="modal-footer-luxury">
+      <button class="btn-save-luxury shadow-sm" (click)="saveItem()" [disabled]="isSaving">
+        {{ isSaving ? 'جاري الحفظ...' : (modalMode === 'add' ? 'إضافة للمتجر' : 'حفظ التغييرات') }}
+      </button>
+      <button class="btn-cancel-luxury" (click)="closeModal()" [disabled]="isSaving">إلغاء</button>
+    </div>
+  </div>
+</div>

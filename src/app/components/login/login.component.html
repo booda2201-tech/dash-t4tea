@@ -1,0 +1,40 @@
+
+
+
+
+<div class="login-wrapper">
+  <div class="login-card shadow-lg">
+    <div class="brand-section">
+      <h1 class="brand-logo">.T4TEA</h1>
+    </div>
+
+    <form (ngSubmit)="onLogin()">
+      <div *ngIf="errorMessage" class="alert-error mb-3 text-center">
+        {{ errorMessage }}
+      </div>
+
+      <div class="mb-4">
+        <label class="form-label-luxury text-end">رقم الهاتف</label>
+        <div class="input-group-luxury">
+          <i class="fa fa-phone icon"></i>
+          <input type="tel" name="phone" class="form-input-luxury"
+                  [(ngModel)]="loginData.phone" placeholder="01xxxxxxxxx" autocomplete="tel">
+        </div>
+      </div>
+
+      <div class="mb-5">
+        <label class="form-label-luxury text-end">كلمة المرور</label>
+        <div class="input-group-luxury">
+          <i class="fa fa-lock icon"></i>
+          <input type="password" name="password" class="form-input-luxury"
+                  [(ngModel)]="loginData.password" placeholder="••••••••" autocomplete="current-password">
+        </div>
+      </div>
+
+      <button type="submit" class="btn-login-luxury" [disabled]="isLoading">
+        <i class="fa fa-sign-in mx-1"></i>
+        {{ isLoading ? 'جاري الدخول...' : 'تسجيل الدخول' }}
+      </button>
+    </form>
+  </div>
+</div>

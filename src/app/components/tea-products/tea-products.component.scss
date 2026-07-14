@@ -1,0 +1,173 @@
+$green: #0a3d35;
+$cream: #fcebd1;
+$white: #ffffff;
+
+.tea-products-page {
+  direction: rtl;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.75rem;
+}
+
+.page-title {
+  margin: 0 0 0.35rem;
+  font-size: 1.9rem;
+  font-weight: 800;
+  color: $green;
+}
+
+.page-sub {
+  margin: 0;
+  color: rgba(10, 61, 53, 0.55);
+  font-size: 0.95rem;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  flex: 1;
+  max-width: 360px;
+  min-width: 200px;
+  background: $white;
+  border: 1px solid rgba(10, 61, 53, 0.12);
+  border-radius: 999px;
+  padding: 0.65rem 1rem;
+
+  &:focus-within {
+    border-color: rgba(10, 61, 53, 0.35);
+    box-shadow: 0 0 0 3px rgba(10, 61, 53, 0.07);
+  }
+
+  i {
+    color: $green;
+    opacity: 0.4;
+  }
+
+  input {
+    flex: 1;
+    min-width: 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 0.9rem;
+
+    &::-webkit-search-cancel-button {
+      display: none;
+    }
+  }
+
+  .btn-clear {
+    width: 22px;
+    height: 22px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(10, 61, 53, 0.08);
+    color: $green;
+    cursor: pointer;
+    line-height: 1;
+  }
+}
+
+.filter-meta {
+  color: rgba(10, 61, 53, 0.55);
+  font-size: 0.9rem;
+}
+
+.item-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.item-name {
+  font-weight: 600;
+  color: $green;
+}
+
+.col-muted {
+  color: rgba(10, 61, 53, 0.55);
+}
+
+.col-price {
+  font-weight: 700;
+  color: $green;
+  white-space: nowrap;
+}
+
+.empty-msg {
+  text-align: center;
+  color: rgba(10, 61, 53, 0.45);
+  padding: 2.5rem 1rem !important;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.btn-action {
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  border: 1px solid rgba(10, 61, 53, 0.15);
+  background: transparent;
+  color: $green;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s;
+
+  &.edit:hover {
+    background: $green;
+    border-color: $green;
+    color: $white;
+  }
+
+  &.delete {
+    border-color: rgba(220, 53, 69, 0.25);
+    color: #c0392b;
+
+    &:hover {
+      background: #dc3545;
+      border-color: #dc3545;
+      color: $white;
+    }
+  }
+}
+
+.product-thumb {
+  width: 48px;
+  height: 48px;
+  background: $cream;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $green;
+  font-weight: bold;
+  overflow: hidden;
+  flex-shrink: 0;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+}
