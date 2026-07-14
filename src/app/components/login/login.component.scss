@@ -17,6 +17,11 @@
   border-radius: 30px;
   padding: 3.5rem 2.5rem;
   border: 1px solid rgba(10, 61, 53, 0.08);
+
+  @media (max-width: 576px) {
+    padding: 2.25rem 1.35rem;
+    border-radius: 22px;
+  }
 }
 
 .brand-section {

@@ -50,7 +50,7 @@
             </td>
           </tr>
           <tr *ngFor="let product of filteredProducts; trackBy: trackById" class="table-row">
-            <td>
+            <td data-label="المنتج">
               <div class="item-cell">
                 <div class="product-thumb">
                   <img
@@ -67,10 +67,10 @@
                 <span class="item-name">{{ product.name }}</span>
               </div>
             </td>
-            <td class="col-muted">{{ product.categoryName || '—' }}</td>
-            <td class="col-price">{{ product.price }} ج.م</td>
-            <td class="col-muted">{{ product.discount || 0 }} ج.م</td>
-            <td>
+            <td class="col-muted" data-label="الفئة">{{ product.categoryName || '—' }}</td>
+            <td class="col-price" data-label="السعر">{{ product.price }} ج.م</td>
+            <td class="col-muted" data-label="الخصم">{{ product.discount || 0 }} ج.م</td>
+            <td data-label="الإجراءات">
               <div class="actions">
                 <button type="button" class="btn-action edit" (click)="openModal('edit', product)" title="تعديل">
                   <i class="fa fa-pencil"></i>

@@ -59,24 +59,30 @@ h1, h2, h3, h4, h5, h6 {
 .custom-modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.4); // تعتيم الخلفية
-  backdrop-filter: blur(8px);    // تأثير الزجاج المضبب
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
   z-index: 9999;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 1rem;
+  overflow-y: auto;
 }
 
 .custom-modal-content {
   background: #ffffff;
-  width: 90%;
+  width: 100%;
   max-width: 550px;
-  border-radius: 30px; // زوايا دائرية ناعمة
+  max-height: min(92vh, 900px);
+  border-radius: 30px;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
-  direction: rtl; // الاتجاه يمين ليسار
+  direction: rtl;
   overflow: hidden;
-  border: 1px solid rgba(194, 155, 97, 0.2); // إطار ذهبي خفيف
+  border: 1px solid rgba(194, 155, 97, 0.2);
   position: relative;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
 }
 
 /* Modal Header */
@@ -85,11 +91,12 @@ h1, h2, h3, h4, h5, h6 {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-shrink: 0;
 
   h3 {
     font-family: 'Cairo', sans-serif;
     font-weight: 800;
-    color: #0a3d35; // لون الشاي الأخضر الغامق
+    color: #0a3d35;
     font-size: 1.5rem;
     margin: 0;
   }
@@ -119,6 +126,9 @@ h1, h2, h3, h4, h5, h6 {
 /* Modal Body */
 .modal-body-luxury {
   padding: 20px 40px 30px;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
 
   .field-wrapper {
     margin-bottom: 20px;
@@ -136,7 +146,7 @@ h1, h2, h3, h4, h5, h6 {
       padding: 14px 20px;
       border-radius: 15px;
       border: 1px solid rgba(10, 61, 53, 0.1);
-      background: #fdfaf5; // لون كريمي هادئ
+      background: #fdfaf5;
       font-family: 'Cairo', sans-serif;
       font-weight: 600;
       transition: all 0.3s ease;
@@ -144,12 +154,11 @@ h1, h2, h3, h4, h5, h6 {
 
       &:focus {
         background: #ffffff;
-        border-color: #c29b61; // ذهبي عند التحديد
+        border-color: #c29b61;
         box-shadow: 0 8px 20px rgba(194, 155, 97, 0.1);
       }
     }
 
-    /* تنسيق خاص للـ select */
     select.form-input-luxury {
       cursor: pointer;
       appearance: none;
@@ -166,6 +175,7 @@ h1, h2, h3, h4, h5, h6 {
   padding: 10px 40px 40px;
   display: flex;
   gap: 15px;
+  flex-shrink: 0;
 
   button {
     padding: 15px;
@@ -180,8 +190,8 @@ h1, h2, h3, h4, h5, h6 {
 
   .btn-save-luxury {
     flex: 2;
-    background: #0a3d35; // أخضر شاي
-    color: #fcebd1; // ذهبي فاتح
+    background: #0a3d35;
+    color: #fcebd1;
     box-shadow: 0 10px 20px rgba(10, 61, 53, 0.2);
 
     &:hover {
@@ -354,3 +364,187 @@ $white: #ffffff;
   padding: 8px 20px;
   font-size: 0.85rem;
 }
+
+/* --- Responsive dashboard helpers --- */
+@media (max-width: 992px) {
+  .btn-gold {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+
+    &:hover {
+      transform: none;
+    }
+  }
+}
+
+/* جداول الموبايل: كروت بدل عرض أفقي مقطوع */
+@media (max-width: 768px) {
+  .table-container {
+    background: transparent !important;
+    border-radius: 0 !important;
+    overflow: visible !important;
+    box-shadow: none !important;
+
+    .table-responsive {
+      overflow: visible !important;
+    }
+
+    .custom-table {
+      min-width: 0 !important;
+      width: 100% !important;
+      display: block;
+
+      thead {
+        display: none;
+      }
+
+      tbody {
+        display: block;
+      }
+
+      tbody tr.table-row {
+        display: block;
+        background: rgba(253, 239, 225, 0.7);
+        border: 1px solid rgba(10, 61, 53, 0.08);
+        border-radius: 18px;
+        padding: 0.85rem 1rem;
+        margin-bottom: 0.85rem;
+        box-shadow: 0 4px 14px rgba(10, 61, 53, 0.04);
+
+        &:hover {
+          background: rgba(253, 239, 225, 0.9);
+        }
+      }
+
+      /* صفوف الرسائل الفارغة / التحميل */
+      tbody tr:not(.table-row) {
+        display: block;
+        background: rgba(253, 239, 225, 0.55);
+        border-radius: 18px;
+        padding: 1.5rem 1rem;
+        text-align: center;
+      }
+
+      tbody td {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        width: 100%;
+        padding: 0.55rem 0 !important;
+        border-bottom: 1px solid rgba(10, 61, 53, 0.08) !important;
+        background: transparent !important;
+        text-align: start !important;
+        white-space: normal;
+
+        &:last-child {
+          border-bottom: none !important;
+          padding-top: 0.75rem !important;
+        }
+
+        &::before {
+          content: attr(data-label);
+          flex-shrink: 0;
+          color: rgba(10, 61, 53, 0.55);
+          font-weight: 700;
+          font-size: 0.82rem;
+        }
+
+        /* أول عمود (اسم المنتج/الأداة): بدون لابل عشان المساحة */
+        &:first-child {
+          display: block;
+          padding-bottom: 0.75rem !important;
+
+          &::before {
+            display: none;
+          }
+        }
+      }
+
+      .item-cell,
+      .product-cell {
+        width: 100%;
+      }
+
+      .img-placeholder,
+      .product-thumb {
+        width: 48px;
+        height: 48px;
+      }
+
+      .actions {
+        justify-content: flex-end;
+        width: auto;
+        margin-inline-start: auto;
+      }
+
+      .empty-msg {
+        display: block;
+        width: 100%;
+        text-align: center;
+        border: none !important;
+        padding: 1rem 0 !important;
+
+        &::before {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .custom-modal-content {
+    border-radius: 22px;
+    max-height: 94vh;
+  }
+
+  .modal-header-luxury {
+    padding: 20px 18px 8px;
+
+    h3 {
+      font-size: 1.2rem;
+    }
+  }
+
+  .modal-body-luxury {
+    padding: 12px 18px 18px;
+  }
+
+  .modal-footer-luxury {
+    padding: 8px 18px 22px;
+    flex-direction: column;
+
+    button {
+      width: 100%;
+      padding: 13px;
+    }
+
+    .btn-save-luxury,
+    .btn-cancel-luxury {
+      flex: none;
+    }
+  }
+
+  .btn-icon {
+    width: 38px;
+    height: 38px;
+  }
+
+  .btn-gold {
+    width: 100%;
+  }
+}
+
+/* Row fields داخل مودالات الهوم */
+.row-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+
+  @media (max-width: 576px) {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}
+

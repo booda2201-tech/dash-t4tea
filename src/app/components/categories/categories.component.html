@@ -1,13 +1,13 @@
 <div class="categories-page">
-  <div class="d-flex justify-content-between align-items-center mb-5 flex-wrap gap-3">
+  <header class="page-header">
     <div>
       <h1 class="page-title">إدارة الفئات</h1>
-      <p class="text-muted mb-0">نظم أنواع الشاي المرتبطة بالمتجات</p>
+      <p class="page-sub">نظم أنواع الشاي المرتبطة بالمتجات</p>
     </div>
-    <button class="btn btn-gold shadow-sm px-4" (click)="openModal('add')">
-      <i class="fa fa-plus ms-2"></i> إضافة فئة جديدة
+    <button type="button" class="btn btn-gold" (click)="openModal('add')">
+      <i class="fa fa-plus"></i> إضافة فئة جديدة
     </button>
-  </div>
+  </header>
 
   <div class="loading-state" *ngIf="isLoading">
     جاري تحميل الفئات...
@@ -20,25 +20,26 @@
   </div>
 
   <div class="category-grid" *ngIf="!isLoading && categories.length > 0">
-    <div class="category-item shadow-sm" *ngFor="let cat of categories">
-      <div class="cat-main">
-        <div class="cat-avatar">{{ (cat.name || '?').charAt(0) }}</div>
-        <div class="cat-info">
-          <h3>{{ cat.name }}</h3>
-          <p class="cat-desc" *ngIf="cat.description">{{ cat.description }}</p>
-          <span class="cat-count">{{ cat.count || 0 }} منتج مسجل</span>
-        </div>
-      </div>
+    <article class="category-item" *ngFor="let cat of categories">
+      <div class="cat-avatar">{{ (cat.name || '?').charAt(0) }}</div>
 
-      <div class="cat-actions d-flex gap-2">
-        <button type="button" class="btn-action edit" (click)="openModal('edit', cat)" title="تعديل">
-          <i class="fa fa-pencil"></i>
-        </button>
-        <button type="button" class="btn-action delete" (click)="deleteCategory(cat)" title="حذف">
-          <i class="fa fa-trash"></i>
-        </button>
+      <div class="cat-body">
+        <div class="cat-top">
+          <h3 class="cat-name">{{ cat.name }}</h3>
+          <div class="cat-actions">
+            <button type="button" class="btn-action edit" (click)="openModal('edit', cat)" title="تعديل">
+              <i class="fa fa-pencil"></i>
+            </button>
+            <button type="button" class="btn-action delete" (click)="deleteCategory(cat)" title="حذف">
+              <i class="fa fa-trash"></i>
+            </button>
+          </div>
+        </div>
+
+        <p class="cat-desc" *ngIf="cat.description">{{ cat.description }}</p>
+        <span class="cat-count">{{ cat.count || 0 }} منتج مسجل</span>
       </div>
-    </div>
+    </article>
   </div>
 </div>
 

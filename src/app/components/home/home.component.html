@@ -84,7 +84,7 @@
             </td>
           </tr>
           <tr *ngFor="let item of displayedItems" class="table-row">
-            <td>
+            <td data-label="اسم المنتج">
               <div class="product-cell">
                 <div class="product-thumb">
                   <img
@@ -101,14 +101,14 @@
                 <span class="product-name">{{ item.name }}</span>
               </div>
             </td>
-            <td class="col-muted">{{ item.category || '—' }}</td>
-            <td class="text-center">
+            <td class="col-muted" data-label="الفئة">{{ item.category || '—' }}</td>
+            <td class="text-center" data-label="النوع">
               <span class="type-badge" [class.tea]="item.type === 'Tea'" [class.ware]="item.type !== 'Tea'">
                 {{ item.type === 'Tea' ? 'شاي' : 'أدوات' }}
               </span>
             </td>
-            <td class="col-price">{{ item.price }} ج.م</td>
-            <td>
+            <td class="col-price" data-label="السعر">{{ item.price }} ج.م</td>
+            <td data-label="الإجراءات">
               <div class="actions">
                 <button type="button" class="btn-icon" (click)="openModal('edit', item)" title="تعديل">
                   <i class="fa fa-pencil"></i>

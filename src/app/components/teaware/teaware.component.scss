@@ -2,8 +2,19 @@ $green: #0a3d35;
 $cream: #fcebd1;
 $white: #ffffff;
 
+:host {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
 .teaware-page {
   direction: rtl;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
 }
 
 .page-header {
@@ -13,6 +24,14 @@ $white: #ffffff;
   gap: 1.25rem;
   flex-wrap: wrap;
   margin-bottom: 1.75rem;
+
+  @media (max-width: 576px) {
+    margin-bottom: 1.25rem;
+
+    .btn-gold {
+      width: 100%;
+    }
+  }
 }
 
 .page-title {
@@ -20,6 +39,10 @@ $white: #ffffff;
   font-size: 1.9rem;
   font-weight: 800;
   color: $green;
+
+  @media (max-width: 768px) {
+    font-size: 1.5rem;
+  }
 }
 
 .page-sub {
@@ -47,6 +70,12 @@ $white: #ffffff;
   border: 1px solid rgba(10, 61, 53, 0.12);
   border-radius: 999px;
   padding: 0.65rem 1rem;
+
+  @media (max-width: 768px) {
+    max-width: none;
+    min-width: 0;
+    width: 100%;
+  }
 
   &:focus-within {
     border-color: rgba(10, 61, 53, 0.35);

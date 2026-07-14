@@ -1,44 +1,73 @@
+<div class="dashboard-wrapper" [class.sidebar-open]="menuOpen">
+  <div
+    class="sidebar-backdrop"
+    [class.show]="menuOpen"
+    (click)="closeMenu()"
+    aria-hidden="true"
+  ></div>
 
-
-
-<div class="dashboard-wrapper d-flex flex-row">
-  <aside class="sidebar d-flex flex-column p-4 shadow-lg">
-    <div class="logo-area text-center mb-5">
-      <h2 class="brand-title">T4TEA<span class="dot">.</span></h2>
+  <aside class="sidebar" [class.open]="menuOpen" aria-label="القائمة الجانبية">
+    <div class="sidebar-top">
+      <div class="logo-area">
+        <h2 class="brand-title">T4TEA<span class="dot">.</span></h2>
+      </div>
+      <button
+        type="button"
+        class="sidebar-close"
+        (click)="closeMenu()"
+        aria-label="إغلاق القائمة"
+      >
+        &times;
+      </button>
     </div>
 
-    <ul class="nav flex-column gap-3 p-0">
+    <ul class="nav flex-column gap-2 p-0">
       <li class="nav-item">
-        <a class="nav-link" routerLink="/dashboard/home" routerLinkActive="active">
+        <a class="nav-link" routerLink="/dashboard/home" routerLinkActive="active" (click)="closeMenu()">
           <i class="fa fa-th-large ms-2"></i> الإحصائيات
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="/dashboard/cat" routerLinkActive="active">
+        <a class="nav-link" routerLink="/dashboard/cat" routerLinkActive="active" (click)="closeMenu()">
           <i class="fa fa-tags ms-2"></i> الفئات
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="/dashboard/tea-pro" routerLinkActive="active">
+        <a class="nav-link" routerLink="/dashboard/tea-pro" routerLinkActive="active" (click)="closeMenu()">
           <i class="fa fa-leaf ms-2"></i> منتجات الشاي
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="/dashboard/teaw" routerLinkActive="active">
+        <a class="nav-link" routerLink="/dashboard/teaw" routerLinkActive="active" (click)="closeMenu()">
           <i class="fa fa-coffee ms-2"></i> أدوات الشاي
         </a>
       </li>
     </ul>
 
-    <div class="mt-auto text-center">
+    <div class="sidebar-bottom">
       <button type="button" class="btn btn-logout w-100" (click)="logout()">
         تسجيل الخروج <i class="fa fa-sign-out mx-2"></i>
       </button>
     </div>
   </aside>
 
+  <div class="dashboard-body">
+    <header class="mobile-topbar">
+      <button
+        type="button"
+        class="menu-toggle"
+        (click)="toggleMenu()"
+        [attr.aria-expanded]="menuOpen"
+        aria-label="فتح القائمة"
+      >
+        <i class="fa fa-bars"></i>
+      </button>
+      <span class="mobile-brand">T4TEA<span class="dot">.</span></span>
+      <span class="topbar-spacer" aria-hidden="true"></span>
+    </header>
 
-  <main class="main-content flex-grow-1 p-5">
-    <router-outlet></router-outlet>
-  </main>
+    <main class="main-content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
 </div>
