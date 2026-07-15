@@ -38,6 +38,6 @@ export const environment = {
     profile: '/api/Profile',
     search: '/api/Search',
     cart: '/api/Cart',
-    wishlist: '/api/Wishlist'
+    wishlist: '/api/Wishlist/GetWishlist'
   }
 };

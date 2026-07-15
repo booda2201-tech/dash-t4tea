@@ -1,6 +1,7 @@
 export const environment = {
   production: false,
   // Empty in development → requests go through Angular proxy (avoids CORS)
+  // Proxy target: https://alhendalcompany-001-site9.atempurl.com
   apiBaseUrl: '',
   apiEndpoints: {
     auth: {
@@ -39,6 +40,6 @@ export const environment = {
     profile: '/api/Profile',
     search: '/api/Search',
     cart: '/api/Cart',
-    wishlist: '/api/Wishlist'
+    wishlist: '/api/Wishlist/GetWishlist'
   }
 };

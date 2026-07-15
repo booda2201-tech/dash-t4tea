@@ -10,7 +10,7 @@
 :root {
   --primary-green: #0a3d35;
   --accent-gold: #c29b61;
-  --bg-beige: #f9f7f2;
+  --bg-beige: #f6f2ea;
   --text-dark: #2c2c2c;
   --white: #ffffff;
 }
@@ -159,13 +159,108 @@ h1, h2, h3, h4, h5, h6 {
       }
     }
 
-    select.form-input-luxury {
-      cursor: pointer;
-      appearance: none;
-      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230a3d35' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-      background-repeat: no-repeat;
-      background-position: left 15px center;
-      background-size: 15px;
+  }
+}
+
+/* --- T4Tea Modern Select (Global — desktop & mobile) --- */
+
+select.form-input-luxury,
+select.form-select-luxury {
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  /* السهم المخصص — !important عشان يتغلب على أي background شورت-هاند محلي */
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230a3d35' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e") !important;
+  background-repeat: no-repeat !important;
+  background-position: left 18px center !important;
+  background-size: 14px !important;
+  background-color: #fdfaf5;
+  padding-left: 48px !important;
+  border-radius: 15px;
+  border: 1px solid rgba(10, 61, 53, 0.12);
+  font-weight: 600;
+  color: #0a3d35;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+
+  &:hover {
+    border-color: rgba(194, 155, 97, 0.5);
+  }
+
+  &:focus {
+    outline: none;
+    background-color: #ffffff;
+    border-color: #c29b61;
+    box-shadow: 0 8px 20px rgba(194, 155, 97, 0.15);
+  }
+}
+
+/* القائمة المنسدلة نفسها — للمتصفحات الحديثة (Chrome/Edge) */
+@supports (appearance: base-select) {
+  select.form-input-luxury,
+  select.form-select-luxury {
+    appearance: base-select;
+    background-image: none !important;
+    padding-left: 20px !important;
+
+    &::picker-icon {
+      content: '';
+      width: 14px;
+      height: 14px;
+      background: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230a3d35' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e") no-repeat center / contain;
+      transition: transform 0.25s ease;
+    }
+
+    &:open::picker-icon {
+      transform: rotate(180deg);
+    }
+
+    &::picker(select) {
+      appearance: base-select;
+      direction: rtl;
+      margin-top: 8px;
+      padding: 8px;
+      border: 1px solid rgba(10, 61, 53, 0.1);
+      border-radius: 18px;
+      background: #ffffff;
+      box-shadow: 0 18px 45px rgba(10, 61, 53, 0.18);
+      opacity: 0;
+      transform: translateY(-8px);
+      transition: opacity 0.2s ease, transform 0.2s ease, display 0.2s allow-discrete, overlay 0.2s allow-discrete;
+    }
+
+    &:open::picker(select) {
+      opacity: 1;
+      transform: translateY(0);
+
+      @starting-style {
+        opacity: 0;
+        transform: translateY(-8px);
+      }
+    }
+
+    option {
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: #0a3d35;
+      background: transparent;
+      transition: background 0.15s ease;
+
+      &:hover,
+      &:focus {
+        background: #fdf3e3;
+      }
+
+      &:checked {
+        background: #0a3d35;
+        color: #fcebd1;
+      }
+
+      &::checkmark {
+        color: #c29b61;
+        margin-inline-start: auto;
+      }
     }
   }
 }
@@ -231,6 +326,48 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+/* Bottom Sheet — المودال بيطلع من تحت زي التطبيقات على الموبايل */
+@keyframes sheetSlideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 576px) {
+  .custom-modal-overlay {
+    align-items: flex-end !important;
+    padding: 0 !important;
+  }
+
+  .custom-modal-content {
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: 92vh !important;
+    margin: 0 !important;
+    border-radius: 26px 26px 0 0 !important;
+    border: none !important;
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.2) !important;
+
+    /* مقبض السحب بتاع الـ bottom sheet */
+    &::before {
+      content: '';
+      width: 44px;
+      height: 5px;
+      border-radius: 999px;
+      background: rgba(10, 61, 53, 0.15);
+      margin: 10px auto 0;
+      flex-shrink: 0;
+    }
+  }
+
+  .animate-modal {
+    animation: sheetSlideUp 0.35s cubic-bezier(0.25, 1, 0.35, 1) !important;
+  }
+}
+
 
 
 /* --- T4Tea Unified Table System (Global) --- */
@@ -241,8 +378,10 @@ $white: #ffffff;
 
 
 .table-container {
-  // لونك اللي إنت اخترته
-  background:  rgba(253, 239, 225, 0.5);
+  // خلفية كريمي أوضح + حدود وظل خفيف عشان تنفصل عن خلفية الصفحة
+  background: #fdf3e3;
+  border: 1px solid rgba(10, 61, 53, 0.08);
+  box-shadow: 0 6px 24px rgba(10, 61, 53, 0.06);
   border-radius: 30px;
   overflow: hidden;
 
@@ -381,6 +520,7 @@ $white: #ffffff;
 @media (max-width: 768px) {
   .table-container {
     background: transparent !important;
+    border: none !important;
     border-radius: 0 !important;
     overflow: visible !important;
     box-shadow: none !important;
@@ -404,22 +544,22 @@ $white: #ffffff;
 
       tbody tr.table-row {
         display: block;
-        background: rgba(253, 239, 225, 0.7);
-        border: 1px solid rgba(10, 61, 53, 0.08);
+        background: #fdf3e3;
+        border: none;
         border-radius: 18px;
         padding: 0.85rem 1rem;
         margin-bottom: 0.85rem;
         box-shadow: 0 4px 14px rgba(10, 61, 53, 0.04);
 
         &:hover {
-          background: rgba(253, 239, 225, 0.9);
+          background: #fcecd4;
         }
       }
 
       /* صفوف الرسائل الفارغة / التحميل */
       tbody tr:not(.table-row) {
         display: block;
-        background: rgba(253, 239, 225, 0.55);
+        background: #fdf3e3;
         border-radius: 18px;
         padding: 1.5rem 1rem;
         text-align: center;
@@ -494,11 +634,6 @@ $white: #ffffff;
 }
 
 @media (max-width: 576px) {
-  .custom-modal-content {
-    border-radius: 22px;
-    max-height: 94vh;
-  }
-
   .modal-header-luxury {
     padding: 20px 18px 8px;
 
@@ -513,16 +648,19 @@ $white: #ffffff;
 
   .modal-footer-luxury {
     padding: 8px 18px 22px;
-    flex-direction: column;
+    flex-direction: row;
+    gap: 10px;
 
     button {
-      width: 100%;
       padding: 13px;
     }
 
-    .btn-save-luxury,
+    .btn-save-luxury {
+      flex: 2;
+    }
+
     .btn-cancel-luxury {
-      flex: none;
+      flex: 1;
     }
   }
 

@@ -5,19 +5,19 @@ import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class WishlistService {
-  private readonly url = `${environment.apiBaseUrl}${environment.apiEndpoints.wishlist}`;
+  private readonly base = environment.apiBaseUrl;
 
   constructor(private http: HttpClient) {}
 
   getAll(): Observable<unknown> {
-    return this.http.get(this.url);
+    return this.http.get(`${this.base}/api/Wishlist/GetWishlist`);
   }
 
   add(payload: unknown): Observable<unknown> {
-    return this.http.post(this.url, payload);
+    return this.http.post(`${this.base}/api/Wishlist/Items`, payload);
   }
 
   remove(id: string | number): Observable<unknown> {
-    return this.http.delete(`${this.url}/${id}`);
+    return this.http.delete(`${this.base}/api/Wishlist/Items/${id}`);
   }
 }

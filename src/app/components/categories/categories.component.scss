@@ -52,7 +52,8 @@
   text-align: center;
   padding: 60px 20px;
   color: #0a3d35;
-  background: rgba(253, 239, 225, 0.45);
+  background: #fdf3e3;
+  border: 1px solid rgba(10, 61, 53, 0.08);
   border-radius: 24px;
 }
 
@@ -99,16 +100,16 @@
   align-items: flex-start;
   gap: 0.9rem;
   padding: 1.15rem 1.15rem;
-  background: rgba(253, 239, 225, 0.55);
+  background: #fdf3e3;
   border-radius: 20px;
-  border: 1px solid rgba(194, 155, 97, 0.12);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.02);
+  border: 1px solid rgba(10, 61, 53, 0.08);
+  box-shadow: 0 6px 24px rgba(10, 61, 53, 0.06);
   transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 
   &:hover {
-    background: #efe9df;
-    border-color: rgba(194, 155, 97, 0.3);
-    box-shadow: 0 10px 22px rgba(194, 155, 97, 0.1);
+    background: #fcecd4;
+    border-color: rgba(194, 155, 97, 0.35);
+    box-shadow: 0 12px 28px rgba(10, 61, 53, 0.1);
     transform: translateY(-2px);
   }
 }
@@ -330,12 +331,14 @@
 
     .modal-footer-luxury {
       padding: 8px 18px 22px;
-      flex-direction: column;
+      gap: 10px;
 
-      .btn-save-luxury,
+      .btn-save-luxury {
+        flex: 2;
+      }
+
       .btn-cancel-luxury {
-        flex: none;
-        width: 100%;
+        flex: 1;
       }
     }
   }

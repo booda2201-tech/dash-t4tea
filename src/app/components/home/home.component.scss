@@ -81,7 +81,9 @@ $white: #ffffff;
   align-items: center;
   gap: 1.15rem;
   padding: 1.5rem 1.4rem;
-  background: rgba(253, 239, 225, 0.55);
+  background: #fdf3e3;
+  border: 1px solid rgba(10, 61, 53, 0.08);
+  box-shadow: 0 6px 24px rgba(10, 61, 53, 0.06);
   border-radius: 22px;
 
   @media (max-width: 576px) {
@@ -141,6 +143,11 @@ $white: #ffffff;
     flex-wrap: wrap;
     padding: 1.35rem 1.5rem;
     border-bottom: 1px solid rgba(10, 61, 53, 0.08);
+
+    @media (max-width: 768px) {
+      border-bottom: none;
+      padding-inline: 0;
+    }
   }
 
   .panel-head__main {
