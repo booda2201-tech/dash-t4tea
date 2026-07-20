@@ -3,6 +3,11 @@
     "target": "https://alhendalcompany-001-site9.atempurl.com",
     "secure": true,
     "changeOrigin": true,
-    "logLevel": "debug"
+    "logLevel": "debug",
+    "timeout": 120000,
+    "proxyTimeout": 120000,
+    "headers": {
+      "Connection": "keep-alive"
+    }
   }
 }

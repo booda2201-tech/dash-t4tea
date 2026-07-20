@@ -24,7 +24,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.auth.isLoggedIn()) {
-      this.router.navigate(['/dashboard/home']);
+      this.router.navigate(['/choose-section']);
       return;
     }
 
@@ -57,7 +57,7 @@ export class LoginComponent implements OnInit {
           this.shakeCard();
           return;
         }
-        this.router.navigate(['/dashboard/home']);
+        this.router.navigate(['/choose-section']);
       },
       error: (err) => {
         this.isLoading = false;

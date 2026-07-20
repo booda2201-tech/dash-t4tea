@@ -2,35 +2,42 @@
 
 
 <main class="tea-products-page">
-  <header class="page-header">
+  <header class="page-header dashboard-page-hero">
     <div>
+      <span class="page-eyebrow">PREMIUM TEA CATALOG</span>
       <h1 class="page-title">مخزون الشاي الملكي</h1>
-      <p class="page-sub">إجمالي الأصناف المتوفرة: {{ teaProducts.length }}</p>
+      <p class="page-sub">إدارة أصناف الشاي والأسعار والصور من مكان واحد.</p>
     </div>
     <button type="button" class="btn btn-gold" (click)="openModal('add')">
       <i class="fa fa-plus"></i> إضافة شاي جديد
     </button>
   </header>
 
-  <div class="toolbar">
-    <div class="search-bar">
-      <i class="fa fa-search" aria-hidden="true"></i>
-      <input
-        type="search"
-        [ngModel]="searchQuery"
-        (ngModelChange)="onSearchChange($event)"
-        placeholder="ابحث بالاسم أو الفئة..."
-      />
-      <button *ngIf="searchQuery" type="button" class="btn-clear" (click)="clearSearch()">&times;</button>
-    </div>
-    <span class="filter-meta" *ngIf="searchQuery">
-      {{ filteredProducts.length }} نتيجة
-    </span>
-  </div>
+  <section class="catalog-workspace">
+    <header class="workspace-head">
+      <div class="workspace-copy">
+        <span class="workspace-kicker">إدارة المخزون</span>
+        <h2>قائمة منتجات الشاي</h2>
+        <p>{{ filteredProducts.length }} من أصل {{ teaProducts.length }} منتج</p>
+      </div>
 
-  <div class="table-container border-0">
-    <div class="table-responsive">
-      <table class="table custom-table align-middle mb-0">
+      <div class="toolbar">
+        <div class="search-bar">
+          <i class="fa fa-search" aria-hidden="true"></i>
+          <input
+            type="search"
+            [ngModel]="searchQuery"
+            (ngModelChange)="onSearchChange($event)"
+            placeholder="ابحث بالاسم أو الفئة..."
+          />
+          <button *ngIf="searchQuery" type="button" class="btn-clear" (click)="clearSearch()">&times;</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="table-container border-0">
+      <div class="table-responsive">
+        <table class="table custom-table align-middle mb-0">
         <thead>
           <tr>
             <th>المنتج</th>
@@ -42,14 +49,16 @@
         </thead>
         <tbody>
           <tr *ngIf="isLoading">
-            <td colspan="5" class="empty-msg">جاري التحميل...</td>
+                <td colspan="5" class="loader-cell">
+                  <app-tea-loader message="جاري تحضير منتجات الشاي..."></app-tea-loader>
+                </td>
           </tr>
           <tr *ngIf="!isLoading && !filteredProducts.length">
             <td colspan="5" class="empty-msg">
               {{ searchQuery ? 'لا توجد نتائج مطابقة' : 'لا توجد منتجات بعد' }}
             </td>
           </tr>
-          <tr *ngFor="let product of filteredProducts; trackBy: trackById" class="table-row">
+              <tr *ngFor="let product of (isLoading ? [] : filteredProducts); trackBy: trackById" class="table-row">
             <td data-label="المنتج">
               <div class="item-cell">
                 <div class="product-thumb">
@@ -82,9 +91,10 @@
             </td>
           </tr>
         </tbody>
-      </table>
+        </table>
+      </div>
     </div>
-  </div>
+  </section>
 </main>
 
 <div class="custom-modal-overlay" *ngIf="isModalOpen" (click)="closeModal()">
@@ -95,6 +105,8 @@
     </div>
 
     <div class="modal-body-luxury">
+      <p class="detail-loading" *ngIf="isLoadingDetail">جاري تحميل صور المنتج...</p>
+
       <div class="field-wrapper mb-3">
         <label class="form-label">اسم المنتج</label>
         <input type="text" class="form-input-luxury" [(ngModel)]="productModel.name" placeholder="مثلاً: شاي ملكي..">
@@ -138,7 +150,9 @@
           [images]="productModel.imageUrls"
           [multiple]="true"
           [maxFiles]="8"
-          (imagesChange)="productModel.imageUrls = $event"
+          [maxSizeMb]="5"
+          (imagesChange)="onImagesChange($event)"
+          (filesChange)="onImageFilesChange($event)"
         ></app-image-dropzone>
       </div>
     </div>

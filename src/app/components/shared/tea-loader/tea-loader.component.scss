@@ -1,0 +1,179 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.tea-loader {
+  min-height: 210px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #0a3d35;
+  text-align: center;
+  overflow: hidden;
+  contain: layout paint;
+
+  strong {
+    margin-top: 0.35rem;
+    font-size: 0.88rem;
+    font-weight: 800;
+  }
+
+  > span {
+    margin-top: 0.2rem;
+    color: #82918d;
+    font-size: 0.68rem;
+  }
+}
+
+.loader-art {
+  width: 126px;
+  height: 92px;
+
+  svg {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+}
+
+.teapot {
+  transform-origin: 82px 78px;
+  animation: pour 2.4s cubic-bezier(0.45, 0, 0.2, 1) infinite;
+}
+
+.pot-body {
+  fill: #0a3d35;
+}
+
+.pot-lid,
+.pot-handle,
+.pot-spout {
+  fill: none;
+  stroke: #0a3d35;
+  stroke-width: 6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.brand-dot {
+  fill: #f4e5cd;
+}
+
+.brand-leaf {
+  fill: #c29b61;
+}
+
+.cup-body {
+  fill: #f4e5cd;
+}
+
+.cup-rim,
+.cup-handle {
+  fill: none;
+  stroke: #0a3d35;
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+
+.tea-surface {
+  fill: none;
+  stroke: #c29b61;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-dasharray: 42;
+  stroke-dashoffset: 42;
+  animation: cupFill 2.4s ease-in-out infinite;
+}
+
+.tea-stream {
+  fill: none;
+  stroke: #c29b61;
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-dasharray: 40;
+  stroke-dashoffset: 40;
+  animation: stream 2.4s ease-in-out infinite;
+}
+
+.steam {
+  fill: none;
+  stroke: rgba(10, 61, 53, 0.42);
+  stroke-width: 3;
+  stroke-linecap: round;
+  animation: steam 2.4s ease-in-out infinite;
+}
+
+@keyframes pour {
+  0%, 18%, 88%, 100% { transform: rotate(0deg) translateY(0); }
+  32%, 72% { transform: rotate(12deg) translateY(2px); }
+}
+
+@keyframes stream {
+  0%, 27%, 82%, 100% { stroke-dashoffset: 40; opacity: 0; }
+  38%, 72% { stroke-dashoffset: 0; opacity: 1; }
+}
+
+@keyframes cupFill {
+  0%, 35% { stroke-dashoffset: 42; }
+  70%, 100% { stroke-dashoffset: 0; }
+}
+
+@keyframes steam {
+  0%, 55% { opacity: 0; transform: translateY(5px); }
+  75% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-6px); }
+}
+
+@media (max-width: 576px) {
+  :host {
+    position: fixed;
+    inset: 69px 0 0;
+    z-index: 75;
+    display: grid;
+    place-items: center;
+    width: auto;
+    background: rgba(246, 242, 234, 0.94);
+  }
+
+  .tea-loader {
+    width: min(300px, 86vw);
+    min-height: 210px;
+    padding: 1rem;
+    border: 1px solid rgba(10, 61, 53, 0.08);
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: 0 22px 55px rgba(10, 61, 53, 0.12);
+  }
+
+  .loader-art {
+    width: 122px;
+    height: 88px;
+  }
+
+  .tea-loader strong {
+    margin-top: 0.25rem;
+    font-size: 0.8rem;
+  }
+
+  .tea-loader > span {
+    font-size: 0.62rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .teapot,
+  .tea-stream,
+  .tea-surface,
+  .steam {
+    animation: none;
+  }
+
+  .tea-stream,
+  .tea-surface {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}

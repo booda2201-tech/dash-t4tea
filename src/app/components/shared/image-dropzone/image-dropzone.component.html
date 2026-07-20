@@ -1,6 +1,17 @@
 <div class="dropzone-field">
   <label class="form-label" *ngIf="label">{{ label }}</label>
 
+  <!-- مش hidden عشان المتصفح يسمح بفتح نافذة الملفات -->
+  <input
+    #fileInput
+    [id]="inputId"
+    class="file-input-sr"
+    type="file"
+    accept="image/png,image/jpeg,image/jpg,image/gif,image/webp"
+    [multiple]="multiple"
+    (change)="onFileSelect($event)"
+  />
+
   <div
     class="dropzone"
     [class.dragging]="isDragging"
@@ -8,17 +19,8 @@
     (dragover)="onDragOver($event)"
     (dragleave)="onDragLeave($event)"
     (drop)="onDrop($event)"
-    (click)="!images.length && fileInput.click()"
+    (click)="images.length === 0 && openFilePicker($event)"
   >
-    <input
-      #fileInput
-      type="file"
-      accept="image/*"
-      [multiple]="multiple"
-      hidden
-      (change)="onFileSelect($event)"
-    />
-
     <div class="dropzone-content" *ngIf="!images.length; else previewTpl">
       <i class="fa fa-cloud-upload"></i>
       <p class="title">اسحب الصور هنا</p>
@@ -29,23 +31,28 @@
       <div class="preview-grid">
         <div class="preview-item" *ngFor="let img of images; let i = index">
           <img [src]="img" alt="preview" />
-          <button type="button" class="remove-btn" (click)="removeImage(i); $event.stopPropagation()" title="حذف">
+          <button
+            type="button"
+            class="remove-btn"
+            (click)="removeImage(i, $event)"
+            title="حذف"
+          >
             &times;
           </button>
         </div>
 
         <button
+          *ngIf="multiple && images.length < maxFiles"
           type="button"
           class="add-more"
-          *ngIf="multiple && images.length < maxFiles"
-          (click)="fileInput.click(); $event.stopPropagation()"
+          (click)="openFilePicker($event)"
         >
           <i class="fa fa-plus"></i>
           <span>إضافة</span>
         </button>
       </div>
 
-      <p class="count-hint">{{ images.length }} / {{ maxFiles }} صور</p>
+      <p class="count-hint">{{ images.length }} من أصل {{ maxFiles }} صور</p>
     </ng-template>
   </div>
 

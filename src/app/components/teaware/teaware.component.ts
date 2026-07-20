@@ -6,12 +6,13 @@ import { TeawareService } from '../../services/teaware.service';
 import { TeawareCategoriesService } from '../../services/teaware-categories.service';
 import { ApiResponseHelper } from '../../services/api-response.helper';
 import { ImageDropzoneComponent } from '../shared/image-dropzone/image-dropzone.component';
+import { TeaLoaderComponent } from '../shared/tea-loader/tea-loader.component';
 import { Teaware, TeawareCategory, TeawarePayload } from '../../models/catalog.model';
 
 @Component({
   selector: 'app-teaware',
   standalone: true,
-  imports: [CommonModule, FormsModule, ImageDropzoneComponent],
+  imports: [CommonModule, FormsModule, ImageDropzoneComponent, TeaLoaderComponent],
   templateUrl: './teaware.component.html',
   styleUrls: ['./teaware.component.scss']
 })

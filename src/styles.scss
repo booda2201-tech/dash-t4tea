@@ -3,7 +3,7 @@
 @import 'ngx-toastr/toastr';
 @import "bootstrap/dist/css/bootstrap.min.css";
 @import "font-awesome/css/font-awesome.min.css";
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Tajawal:wght@300;400;500;600;700;800&display=swap');
 
 
 
@@ -22,14 +22,22 @@ html, body {
 }
 
 body {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Tajawal', sans-serif;
   background-color: var(--bg-beige);
   color: var(--text-dark);
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Tajawal', sans-serif;
   color: var(--primary-green);
+}
+
+button,
+input,
+textarea,
+select,
+a {
+  font-family: 'Tajawal', sans-serif;
 }
 
 /* تعديل الـ Scrollbar عشان يبقى شيك */
@@ -60,7 +68,7 @@ h1, h2, h3, h4, h5, h6 {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(2px);
   z-index: 9999;
   display: flex;
   align-items: center;
@@ -94,7 +102,7 @@ h1, h2, h3, h4, h5, h6 {
   flex-shrink: 0;
 
   h3 {
-    font-family: 'Cairo', sans-serif;
+    font-family: 'Tajawal', sans-serif;
     font-weight: 800;
     color: #0a3d35;
     font-size: 1.5rem;
@@ -147,7 +155,7 @@ h1, h2, h3, h4, h5, h6 {
       border-radius: 15px;
       border: 1px solid rgba(10, 61, 53, 0.1);
       background: #fdfaf5;
-      font-family: 'Cairo', sans-serif;
+      font-family: 'Tajawal', sans-serif;
       font-weight: 600;
       transition: all 0.3s ease;
       outline: none;
@@ -265,6 +273,55 @@ select.form-select-luxury {
   }
 }
 
+@media (max-width: 576px) {
+  @supports (appearance: base-select) {
+    select.form-input-luxury,
+    select.form-select-luxury {
+      &::picker(select) {
+        max-height: min(270px, 52vh);
+        margin-top: 6px;
+        padding: 6px;
+        border-radius: 14px;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        scrollbar-width: none;
+
+        &::-webkit-scrollbar {
+          display: none;
+          width: 0;
+          height: 0;
+        }
+
+        &::-webkit-scrollbar-track {
+          margin-block: 8px;
+          border-radius: 999px;
+          background: rgba(10, 61, 53, 0.05);
+        }
+
+        &::-webkit-scrollbar-thumb {
+          min-height: 34px;
+          border-radius: 999px;
+          background: linear-gradient(180deg, #c29b61, #0a3d35);
+        }
+
+        &::-webkit-scrollbar-button {
+          display: none;
+          width: 0;
+          height: 0;
+          -webkit-appearance: none;
+        }
+      }
+
+      option {
+        min-height: 38px;
+        padding: 9px 12px;
+        border-radius: 10px;
+        font-size: 0.84rem;
+      }
+    }
+  }
+}
+
 /* Modal Footer */
 .modal-footer-luxury {
   padding: 10px 40px 40px;
@@ -275,7 +332,7 @@ select.form-select-luxury {
   button {
     padding: 15px;
     border-radius: 18px;
-    font-family: 'Cairo', sans-serif;
+    font-family: 'Tajawal', sans-serif;
     font-weight: 700;
     cursor: pointer;
     transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -345,10 +402,10 @@ select.form-select-luxury {
   .custom-modal-content {
     width: 100% !important;
     max-width: 100% !important;
-    max-height: 92vh !important;
+    max-height: 86vh !important;
     margin: 0 !important;
-    border-radius: 26px 26px 0 0 !important;
-    border: none !important;
+    border-radius: 22px 22px 0 0 !important;
+    border: 0 !important;
     box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.2) !important;
 
     /* مقبض السحب بتاع الـ bottom sheet */
@@ -358,8 +415,71 @@ select.form-select-luxury {
       height: 5px;
       border-radius: 999px;
       background: rgba(10, 61, 53, 0.15);
-      margin: 10px auto 0;
+      margin: 7px auto 0;
       flex-shrink: 0;
+    }
+  }
+
+  .modal-header-luxury {
+    padding: 12px 14px 5px !important;
+
+    h3 {
+      font-size: 1rem !important;
+    }
+
+    .btn-close-custom {
+      width: 30px !important;
+      height: 30px !important;
+    }
+  }
+
+  .modal-body-luxury {
+    padding: 8px 14px 10px !important;
+
+    .field-wrapper,
+    .field-wrapper.mb-3 {
+      margin-bottom: 0.65rem !important;
+    }
+
+    .form-label {
+      margin-bottom: 5px !important;
+      font-size: 0.75rem !important;
+    }
+
+    .form-input-luxury,
+    .form-select-luxury {
+      min-height: 39px;
+      padding: 8px 11px !important;
+      border-radius: 10px !important;
+      font-size: 0.78rem !important;
+    }
+
+    textarea.form-input-luxury {
+      min-height: 54px !important;
+    }
+
+    > .row {
+      margin: 0 !important;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.65rem;
+
+      > [class*='col-'] {
+        width: 100%;
+        padding: 0 !important;
+      }
+    }
+  }
+
+  .modal-footer-luxury {
+    padding: 7px 14px 14px !important;
+    gap: 8px !important;
+
+    button {
+      min-height: 40px;
+      padding: 9px !important;
+      border-radius: 11px !important;
+      font-size: 0.78rem;
     }
   }
 
@@ -390,7 +510,10 @@ $white: #ffffff;
     background-color: transparent !important; /* جعل الجدول شفاف */
 
     thead th {
-      background: rgba(0, 0, 0, 0.11); /* لون خفيف جداً للرأس عشان يتميز */
+      --bs-table-bg: #f4e5cd;
+      --bs-table-accent-bg: transparent;
+      background: #f4e5cd !important;
+      box-shadow: none;
       color: $primary-green;
       font-size: 1.2rem;
       padding: 20px;
@@ -461,7 +584,7 @@ $white: #ffffff;
   border: none;
 
   // الخط والخطوط
-  font-family: 'Cairo', sans-serif;
+  font-family: 'Tajawal', sans-serif;
   font-weight: 700;
   font-size: 0.95rem;
 

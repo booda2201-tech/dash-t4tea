@@ -1,0 +1,270 @@
+$green: #0a3d35;
+$green-light: #12594c;
+$cream: #f6f2ea;
+$gold: #c29b61;
+$white: #fff;
+
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+.choice-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 15% 15%, rgba(194, 155, 97, 0.16), transparent 28%),
+    radial-gradient(circle at 85% 82%, rgba(10, 61, 53, 0.12), transparent 30%),
+    $cream;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0.35;
+    pointer-events: none;
+    background-image: radial-gradient(rgba(10, 61, 53, 0.15) 0.8px, transparent 0.8px);
+    background-size: 22px 22px;
+  }
+}
+
+.choice-card {
+  position: relative;
+  z-index: 1;
+  width: min(720px, 100%);
+  padding: clamp(2rem, 5vw, 4rem);
+  border: 1px solid rgba(10, 61, 53, 0.08);
+  border-radius: 32px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 28px 70px rgba(10, 61, 53, 0.13);
+}
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.brand-logo {
+  display: block;
+  width: min(280px, 75%);
+  max-height: 150px;
+  object-fit: contain;
+}
+
+.intro {
+  text-align: center;
+  margin-bottom: 2rem;
+
+  .eyebrow {
+    color: $gold;
+    font-size: 0.82rem;
+    font-weight: 700;
+  }
+
+  h1 {
+    margin: 0.35rem 0;
+    color: $green;
+    font-family: 'Tajawal', sans-serif;
+    font-size: clamp(1.65rem, 4vw, 2.25rem);
+    font-weight: 800;
+  }
+
+  p {
+    margin: 0;
+    color: rgba(10, 61, 53, 0.58);
+    font-size: 0.9rem;
+  }
+}
+
+.choice-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.choice-option {
+  min-height: 165px;
+  padding: 1.35rem;
+  border: 1px solid rgba(10, 61, 53, 0.1);
+  border-radius: 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.9rem;
+  position: relative;
+  color: $green;
+  text-decoration: none;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    border-color: rgba(194, 155, 97, 0.45);
+    box-shadow: 0 18px 36px rgba(10, 61, 53, 0.12);
+  }
+}
+
+.dashboard-option {
+  color: $white;
+  background: linear-gradient(145deg, $green-light, $green);
+}
+
+.orders-option {
+  background: linear-gradient(145deg, #fffdfa, #f8ecdb);
+}
+
+.option-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 15px;
+  display: grid;
+  place-items: center;
+  font-size: 1.15rem;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.orders-option .option-icon {
+  color: $green;
+  background: rgba(10, 61, 53, 0.08);
+}
+
+.option-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+
+  strong {
+    font-size: 1.05rem;
+  }
+
+  small {
+    opacity: 0.68;
+    font-size: 0.76rem;
+  }
+}
+
+.option-arrow {
+  position: absolute;
+  bottom: 1.25rem;
+  left: 1.25rem;
+  opacity: 0.6;
+}
+
+.logout-button {
+  position: absolute;
+  z-index: 2;
+  top: 1.5rem;
+  left: 1.5rem;
+  border: 1px solid rgba(10, 61, 53, 0.12);
+  border-radius: 999px;
+  padding: 0.65rem 1rem;
+  color: $green;
+  background: rgba(255, 255, 255, 0.82);
+  font-size: 0.82rem;
+
+  i {
+    margin-left: 0.4rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .choice-page {
+    align-items: start;
+    padding: 4.25rem 0.85rem 1rem;
+    overflow-y: auto;
+  }
+
+  .choice-card {
+    width: 100%;
+    padding: 1.25rem 1rem;
+    border: 0;
+    border-radius: 20px;
+    box-shadow: 0 14px 38px rgba(10, 61, 53, 0.1);
+  }
+
+  .brand {
+    margin-bottom: 0.75rem;
+  }
+
+  .brand-logo {
+    width: min(145px, 48vw);
+    max-height: 88px;
+  }
+
+  .intro {
+    margin-bottom: 1.1rem;
+
+    .eyebrow {
+      font-size: 0.68rem;
+    }
+
+    h1 {
+      margin: 0.2rem 0;
+      font-size: 1.35rem;
+    }
+
+    p {
+      max-width: 280px;
+      margin-inline: auto;
+      font-size: 0.72rem;
+      line-height: 1.55;
+    }
+  }
+
+  .choice-grid {
+    grid-template-columns: 1fr;
+    gap: 0.7rem;
+  }
+
+  .choice-option {
+    min-height: 86px;
+    padding: 0.85rem;
+    border-radius: 16px;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.75rem;
+
+    &:hover {
+      transform: none;
+    }
+  }
+
+  .option-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    flex-shrink: 0;
+    font-size: 0.95rem;
+  }
+
+  .option-copy {
+    min-width: 0;
+    flex: 1;
+
+    strong {
+      font-size: 0.9rem;
+    }
+
+    small {
+      font-size: 0.66rem;
+    }
+  }
+
+  .option-arrow {
+    position: static;
+    flex-shrink: 0;
+    font-size: 0.75rem;
+  }
+
+  .logout-button {
+    top: 0.8rem;
+    left: 0.85rem;
+    padding: 0.55rem 0.8rem;
+    font-size: 0.72rem;
+  }
+}

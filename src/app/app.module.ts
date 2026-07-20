@@ -7,10 +7,6 @@ import { ToastrModule } from 'ngx-toastr';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HomeComponent } from './components/home/home.component';
-import { CategoriesComponent } from './components/categories/categories.component';
-import { TeaProductsComponent } from './components/tea-products/tea-products.component';
-import { TeawareComponent } from './components/teaware/teaware.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { LoginComponent } from './components/login/login.component';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
@@ -25,10 +21,6 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
     BrowserAnimationsModule,
     FormsModule,
     HttpClientModule,
-    HomeComponent,
-    CategoriesComponent,
-    TeaProductsComponent,
-    TeawareComponent,
     DashboardComponent,
     LoginComponent,
     ToastrModule.forRoot({

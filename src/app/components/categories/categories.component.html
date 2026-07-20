@@ -1,46 +1,57 @@
 <div class="categories-page">
-  <header class="page-header">
+  <header class="page-header dashboard-page-hero">
     <div>
+      <span class="page-eyebrow">CATALOG ORGANIZATION</span>
       <h1 class="page-title">إدارة الفئات</h1>
-      <p class="page-sub">نظم أنواع الشاي المرتبطة بالمتجات</p>
+      <p class="page-sub">نظّم تصنيفات المتجر واربط المنتجات بالفئة المناسبة.</p>
     </div>
     <button type="button" class="btn btn-gold" (click)="openModal('add')">
       <i class="fa fa-plus"></i> إضافة فئة جديدة
     </button>
   </header>
 
-  <div class="loading-state" *ngIf="isLoading">
-    جاري تحميل الفئات...
-  </div>
-
-  <div class="empty-state" *ngIf="!isLoading && categories.length === 0">
-    <i class="fa fa-tags"></i>
-    <p>لا توجد فئات بعد</p>
-    <button class="btn btn-gold" (click)="openModal('add')">أضف أول فئة</button>
-  </div>
-
-  <div class="category-grid" *ngIf="!isLoading && categories.length > 0">
-    <article class="category-item" *ngFor="let cat of categories">
-      <div class="cat-avatar">{{ (cat.name || '?').charAt(0) }}</div>
-
-      <div class="cat-body">
-        <div class="cat-top">
-          <h3 class="cat-name">{{ cat.name }}</h3>
-          <div class="cat-actions">
-            <button type="button" class="btn-action edit" (click)="openModal('edit', cat)" title="تعديل">
-              <i class="fa fa-pencil"></i>
-            </button>
-            <button type="button" class="btn-action delete" (click)="deleteCategory(cat)" title="حذف">
-              <i class="fa fa-trash"></i>
-            </button>
-          </div>
-        </div>
-
-        <p class="cat-desc" *ngIf="cat.description">{{ cat.description }}</p>
-        <span class="cat-count">{{ cat.count || 0 }} منتج مسجل</span>
+  <section class="catalog-workspace categories-workspace">
+    <header class="workspace-head">
+      <div class="workspace-copy">
+        <span class="workspace-kicker">هيكل الكتالوج</span>
+        <h2>الفئات المسجلة</h2>
+        <p>{{ categories.length }} فئة داخل المتجر</p>
       </div>
-    </article>
-  </div>
+    </header>
+
+    <div class="loading-state catalog-state" *ngIf="isLoading">
+      <app-tea-loader message="جاري تحضير الفئات..."></app-tea-loader>
+    </div>
+
+    <div class="empty-state catalog-state" *ngIf="!isLoading && categories.length === 0">
+      <i class="fa fa-tags"></i>
+      <p>لا توجد فئات بعد</p>
+      <button class="btn btn-gold" (click)="openModal('add')">أضف أول فئة</button>
+    </div>
+
+    <div class="category-grid" *ngIf="!isLoading && categories.length > 0">
+      <article class="category-item" *ngFor="let cat of categories">
+        <div class="cat-avatar">{{ (cat.name || '?').charAt(0) }}</div>
+
+        <div class="cat-body">
+          <div class="cat-top">
+            <h3 class="cat-name">{{ cat.name }}</h3>
+            <div class="cat-actions">
+              <button type="button" class="btn-action edit" (click)="openModal('edit', cat)" title="تعديل">
+                <i class="fa fa-pencil"></i>
+              </button>
+              <button type="button" class="btn-action delete" (click)="deleteCategory(cat)" title="حذف">
+                <i class="fa fa-trash"></i>
+              </button>
+            </div>
+          </div>
+
+          <p class="cat-desc" *ngIf="cat.description">{{ cat.description }}</p>
+          <span class="cat-count">{{ cat.count || 0 }} منتج مسجل</span>
+        </div>
+      </article>
+    </div>
+  </section>
 </div>
 
 <div class="custom-modal-overlay" *ngIf="isModalOpen" (click)="closeModal()">

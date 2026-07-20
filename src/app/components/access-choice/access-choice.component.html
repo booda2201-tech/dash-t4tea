@@ -1,0 +1,42 @@
+<main class="choice-page" dir="rtl">
+  <button type="button" class="logout-button" (click)="logout()">
+    <i class="fa fa-sign-out"></i>
+    تسجيل الخروج
+  </button>
+
+  <section class="choice-card" aria-labelledby="choice-title">
+    <div class="brand">
+            <img class="brand-logo" src="assets/logo-dark.png" alt="T4TEA" />
+    </div>
+
+    <div class="intro">
+      <span class="eyebrow">مرحباً بك</span>
+      <h1 id="choice-title">اختر وجهتك</h1>
+      <p>هل تريد إدارة المحتوى والمنتجات أم متابعة طلبات العملاء؟</p>
+    </div>
+
+    <div class="choice-grid">
+      <a class="choice-option dashboard-option" routerLink="/dashboard/home">
+        <span class="option-icon">
+          <i class="fa fa-th-large"></i>
+        </span>
+        <span class="option-copy">
+          <strong>لوحة التحكم</strong>
+          <small>الإحصائيات، الفئات والمنتجات</small>
+        </span>
+        <i class="fa fa-arrow-left option-arrow"></i>
+      </a>
+
+      <a class="choice-option orders-option" routerLink="/orders-management">
+        <span class="option-icon">
+          <i class="fa fa-shopping-bag"></i>
+        </span>
+        <span class="option-copy">
+          <strong>إدارة الطلبات</strong>
+          <small>متابعة الطلبات وتحديث حالتها</small>
+        </span>
+        <i class="fa fa-arrow-left option-arrow"></i>
+      </a>
+    </div>
+  </section>
+</main>

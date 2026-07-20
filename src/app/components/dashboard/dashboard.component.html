@@ -9,7 +9,7 @@
   <aside class="sidebar" [class.open]="menuOpen" aria-label="القائمة الجانبية">
     <div class="sidebar-top">
       <div class="logo-area">
-        <h2 class="brand-title">T4TEA<span class="dot">.</span></h2>
+        <img class="brand-logo" src="assets/Group%207.png" alt="T4TEA" />
       </div>
       <button
         type="button"
@@ -45,6 +45,9 @@
     </ul>
 
     <div class="sidebar-bottom">
+      <a class="btn btn-switch w-100 mb-2" routerLink="/choose-section" (click)="closeMenu()">
+        تغيير القسم <i class="fa fa-exchange mx-2"></i>
+      </a>
       <button type="button" class="btn btn-logout w-100" (click)="logout()">
         تسجيل الخروج <i class="fa fa-sign-out mx-2"></i>
       </button>
@@ -62,7 +65,7 @@
       >
         <i class="fa fa-bars"></i>
       </button>
-      <span class="mobile-brand">T4TEA<span class="dot">.</span></span>
+      <img class="mobile-brand" src="assets/Group%207.png" alt="T4TEA" />
       <span class="topbar-spacer" aria-hidden="true"></span>
     </header>
 

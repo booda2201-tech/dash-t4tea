@@ -1,8 +1,9 @@
 <main class="home-page">
-  <header class="home-header">
+  <header class="home-header dashboard-page-hero">
     <div>
+      <span class="page-eyebrow">T4TEA MANAGEMENT</span>
       <h1 class="page-title">لوحة التحكم</h1>
-      <p class="home-sub">مرحباً بك مجدداً في متجر T4Tea</p>
+      <p class="home-sub">نظرة شاملة على المخزون والمنتجات داخل المتجر.</p>
     </div>
     <button type="button" class="btn btn-gold" (click)="openModal('add')">
       <i class="fa fa-plus"></i> إضافة منتج جديد
@@ -35,7 +36,7 @@
     </div>
   </div>
 
-  <section class="table-container latest-products">
+  <section class="table-container latest-products catalog-workspace">
     <div class="panel-head">
       <div class="panel-head__main">
         <div class="panel-titles">
@@ -78,12 +79,17 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngIf="!isSearching && !displayedItems.length">
+          <tr *ngIf="isLoading">
+            <td colspan="5" class="loader-cell">
+              <app-tea-loader message="جاري تحضير لوحة التحكم..."></app-tea-loader>
+            </td>
+          </tr>
+          <tr *ngIf="!isLoading && !isSearching && !displayedItems.length">
             <td colspan="5" class="empty-msg">
               {{ isSearchMode ? 'لا توجد نتائج مطابقة' : 'لا توجد منتجات بعد' }}
             </td>
           </tr>
-          <tr *ngFor="let item of displayedItems" class="table-row">
+          <tr *ngFor="let item of (isLoading ? [] : displayedItems)" class="table-row">
             <td data-label="اسم المنتج">
               <div class="product-cell">
                 <div class="product-thumb">

@@ -40,6 +40,11 @@ export const environment = {
     profile: '/api/Profile',
     search: '/api/Search',
     cart: '/api/Cart',
-    wishlist: '/api/Wishlist/GetWishlist'
+    wishlist: '/api/Wishlist/GetWishlist',
+    orders: {
+      getAll: '/api/Orders/admin/GetAllOrders',
+      getById: '/api/Orders/admin/GetOrder',
+      updateStatus: '/api/Orders/admin/UpdateStatus'
+    }
   }
 };

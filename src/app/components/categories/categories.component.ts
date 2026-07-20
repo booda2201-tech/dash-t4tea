@@ -8,11 +8,12 @@ import { CategoriesService } from '../../services/categories.service';
 import { ProductsService } from '../../services/products.service';
 import { ApiResponseHelper } from '../../services/api-response.helper';
 import { Category, CategoryPayload, Product } from '../../models/catalog.model';
+import { TeaLoaderComponent } from '../shared/tea-loader/tea-loader.component';
 
 @Component({
   selector: 'app-categories',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TeaLoaderComponent],
   templateUrl: './categories.component.html',
   styleUrls: ['./categories.component.scss']
 })
@@ -117,11 +118,11 @@ export class CategoriesComponent implements OnInit {
       next: () => {
         this.toastr.success(this.modalMode === 'add' ? 'تمت إضافة الفئة' : 'تم تحديث الفئة');
         this.closeModal();
-        this.loadCategories();
+        this.reloadCategories();
       },
       error: (err) => {
         this.isSaving = false;
-        this.toastr.error(err?.error?.message || 'فشل حفظ الفئة عبر الـ API');
+        this.toastr.error(this.resolveSaveError(err));
       }
     });
   }
@@ -137,10 +138,10 @@ export class CategoriesComponent implements OnInit {
     this.categoriesService.delete(cat.id).subscribe({
       next: () => {
         this.toastr.success('تم حذف الفئة');
-        this.loadCategories();
+        this.reloadCategories();
       },
       error: (err) => {
-        this.toastr.error(err?.error?.message || 'فشل حذف الفئة عبر الـ API');
+        this.toastr.error(this.resolveSaveError(err, 'فشل حذف الفئة عبر الـ API'));
       }
     });
   }
@@ -150,6 +151,43 @@ export class CategoriesComponent implements OnInit {
     this.isSaving = false;
     this.catForm = { name: '', description: '' };
     this.editingId = null;
+  }
+
+  /** إعادة تحميل إجبارية بعد إضافة/تعديل/حذف */
+  private reloadCategories(): void {
+    this.isLoading = true;
+    forkJoin({
+      categories: this.categoriesService.getAll(true),
+      products: this.productsService.getAll(true)
+    }).subscribe({
+      next: ({ categories, products }) => {
+        this.products = this.apiHelper.asArray<Product>(products);
+        const cats = this.apiHelper.asArray<Category>(categories);
+        this.categories = cats.map((cat) => ({
+          ...cat,
+          count: this.resolveCount(cat)
+        }));
+        this.isLoading = false;
+        setTimeout(() => this.animateCards(), 0);
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.toastr.error(this.resolveSaveError(err, 'تعذر تحديث قائمة الفئات'));
+      }
+    });
+  }
+
+  private resolveSaveError(err: { status?: number; error?: { message?: string } }, fallback?: string): string {
+    if (err?.status === 403) {
+      return 'غير مصرح بإضافة/تعديل الفئات بهذا الحساب';
+    }
+    if (err?.status === 401) {
+      return 'انتهت الجلسة، سجّل الدخول مرة أخرى';
+    }
+    if (err?.status === 504 || err?.status === 0) {
+      return 'السيرفر بطيء أو مش راد (timeout). جرّب تاني بعد ما توقّظ الـ API';
+    }
+    return err?.error?.message || fallback || 'فشل حفظ الفئة عبر الـ API';
   }
 
   private resolveCount(cat: Category): number {

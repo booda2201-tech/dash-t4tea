@@ -1,0 +1,16 @@
+{
+  "name": "T4TEA Admin",
+  "short_name": "T4TEA",
+  "description": "T4TEA Admin Dashboard",
+  "display": "standalone",
+  "start_url": "/",
+  "theme_color": "#0a3d35",
+  "background_color": "#f6f2ea",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    }
+  ]
+}

@@ -1,0 +1,348 @@
+<div class="orders-shell">
+  <header class="orders-topbar">
+    <button type="button" class="brand-button" (click)="goToSectionChoice()" aria-label="الصفحة الرئيسية">
+      <img src="assets/logo-dark.png" alt="T4TEA" />
+      <span>
+        <strong>مركز الطلبات</strong>
+        <small>Operations Center</small>
+      </span>
+    </button>
+
+    <div class="topbar-actions">
+      <button type="button" class="topbar-button" (click)="goToSectionChoice()">
+        <i class="fa fa-th-large"></i>
+        الأقسام
+      </button>
+      <button type="button" class="topbar-button logout" (click)="logout()">
+        <i class="fa fa-sign-out"></i>
+        خروج
+      </button>
+    </div>
+  </header>
+
+  <main class="orders-page">
+    <section class="hero-panel">
+      <div class="hero-copy">
+        <span class="hero-eyebrow">T4TEA ORDER MANAGEMENT</span>
+        <h1>إدارة طلبات الموقع</h1>
+        <p>تابع دورة الطلب كاملة، من لحظة الاستلام وحتى التسليم للعميل.</p>
+      </div>
+      <button type="button" class="refresh-button" (click)="loadOrders(true)" [disabled]="isLoading">
+        <i class="fa fa-refresh" [class.fa-spin]="isLoading"></i>
+        <span>{{ isLoading ? 'جاري التحديث' : 'تحديث البيانات' }}</span>
+      </button>
+    </section>
+
+    <section class="stats-grid" aria-label="ملخص الطلبات">
+      <article class="stat-card primary">
+        <span class="stat-icon"><i class="fa fa-shopping-bag"></i></span>
+        <div>
+          <small>إجمالي الطلبات</small>
+          <strong>{{ orders.length | number }}</strong>
+        </div>
+        <span class="stat-caption">كل الطلبات المسجلة</span>
+      </article>
+
+      <article class="stat-card">
+        <span class="stat-icon pending"><i class="fa fa-clock-o"></i></span>
+        <div>
+          <small>بانتظار التنفيذ</small>
+          <strong>{{ pendingOrdersCount | number }}</strong>
+        </div>
+        <span class="stat-caption">تحتاج إلى متابعة</span>
+      </article>
+
+      <article class="stat-card">
+        <span class="stat-icon active"><i class="fa fa-truck"></i></span>
+        <div>
+          <small>طلبات نشطة</small>
+          <strong>{{ activeOrdersCount | number }}</strong>
+        </div>
+        <span class="stat-caption">تجهيز أو شحن</span>
+      </article>
+
+      <article class="stat-card">
+        <span class="stat-icon revenue"><i class="fa fa-money"></i></span>
+        <div>
+          <small>قيمة الطلبات</small>
+          <strong>{{ totalOrdersValue | number:'1.0-0' }} <em>ج.م</em></strong>
+        </div>
+        <span class="stat-caption">إجمالي القيمة المسجلة</span>
+      </article>
+    </section>
+
+    <section class="access-notice" *ngIf="authForbidden">
+      <span class="notice-icon"><i class="fa fa-shield"></i></span>
+      <div class="notice-copy">
+        <strong>تعذر الوصول إلى بيانات الطلبات</strong>
+        <p>جلسة الدخول الحالية لا تحمل صلاحية Admin المطلوبة لعرض هذا القسم.</p>
+      </div>
+      <div class="notice-actions">
+        <button type="button" class="notice-primary" (click)="reLogin()">تسجيل الدخول مجدداً</button>
+        <button type="button" class="notice-secondary" (click)="copyDebugInfo()">نسخ معلومات الدعم</button>
+      </div>
+    </section>
+
+    <section
+      class="orders-workspace"
+      [class.empty-workspace]="!isLoading && !filteredOrders.length"
+    >
+      <header class="workspace-header">
+        <div>
+          <span class="section-kicker">سجل العمليات</span>
+          <h2>قائمة الطلبات</h2>
+          <p>{{ filteredOrders.length }} طلب ظاهر حالياً</p>
+        </div>
+
+        <div class="toolbar">
+          <label class="search-bar">
+            <i class="fa fa-search" aria-hidden="true"></i>
+            <input
+              type="search"
+              [ngModel]="searchQuery"
+              (ngModelChange)="onSearchChange($event)"
+              placeholder="رقم الطلب، العميل أو الهاتف"
+            />
+            <button *ngIf="searchQuery" type="button" class="btn-clear" (click)="clearSearch()">&times;</button>
+          </label>
+
+          <div class="custom-select" [class.open]="isStatusMenuOpen">
+            <button
+              type="button"
+              class="custom-select-trigger"
+              (click)="toggleStatusMenu($event)"
+              [attr.aria-expanded]="isStatusMenuOpen"
+              aria-haspopup="listbox"
+            >
+              <span>
+                <i class="fa fa-filter"></i>
+                {{ selectedStatusLabel }}
+              </span>
+              <i class="fa fa-angle-down select-chevron"></i>
+            </button>
+
+            <div class="custom-select-menu" *ngIf="isStatusMenuOpen" role="listbox">
+              <button
+                *ngFor="let opt of statusOptions"
+                type="button"
+                role="option"
+                [class.selected]="statusFilter === opt.value"
+                [attr.aria-selected]="statusFilter === opt.value"
+                (click)="selectStatus(opt.value, $event)"
+              >
+                <span class="option-indicator"></span>
+                {{ opt.label }}
+                <i *ngIf="statusFilter === opt.value" class="fa fa-check"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="table-container">
+        <div class="table-responsive">
+          <table class="table custom-table align-middle mb-0">
+            <thead>
+              <tr>
+                <th>رقم الطلب</th>
+                <th>العميل</th>
+                <th>التواصل</th>
+                <th>تاريخ الطلب</th>
+                <th>الإجمالي</th>
+                <th>الحالة</th>
+                <th class="text-center">الإجراء</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngIf="isLoading">
+                <td colspan="7" class="loader-cell">
+                  <app-tea-loader message="جاري تحضير الطلبات..."></app-tea-loader>
+                </td>
+              </tr>
+              <tr *ngIf="!isLoading && !filteredOrders.length">
+                <td colspan="7" class="empty-cell">
+                  <div class="state-panel">
+                    <span class="state-icon"><i class="fa fa-inbox"></i></span>
+                    <strong>{{ searchQuery || statusFilter ? 'لا توجد نتائج مطابقة' : 'لا توجد طلبات جديدة' }}</strong>
+                    <small>{{ searchQuery || statusFilter ? 'جرّب تغيير كلمات البحث أو الفلتر' : 'ستظهر الطلبات الواردة هنا تلقائياً' }}</small>
+                  </div>
+                </td>
+              </tr>
+              <tr *ngFor="let order of (isLoading ? [] : filteredOrders); trackBy: trackById" class="table-row">
+                <td data-label="رقم الطلب">
+                  <span class="order-number">#{{ order.id || order.orderNumber || '—' }}</span>
+                </td>
+                <td data-label="العميل">
+                  <div class="customer-cell">
+                    <span class="customer-avatar">{{ getCustomerInitial(order) }}</span>
+                    <span>
+                      <strong>{{ getCustomerName(order) }}</strong>
+                      <small>{{ order.customerEmail || order.email || 'عميل T4TEA' }}</small>
+                    </span>
+                  </div>
+                </td>
+                <td data-label="التواصل" class="col-muted">{{ getCustomerPhone(order) }}</td>
+                <td data-label="تاريخ الطلب" class="col-muted">{{ getDate(order) }}</td>
+                <td data-label="الإجمالي" class="col-price">{{ getTotal(order) | number:'1.0-2' }} ج.م</td>
+                <td data-label="الحالة">
+                  <span class="status-badge" [ngClass]="getStatusClass(getStatus(order))">
+                    <i class="status-dot"></i>
+                    {{ getStatusLabel(getStatus(order)) }}
+                  </span>
+                </td>
+                <td data-label="الإجراء">
+                  <div class="actions">
+                    <button type="button" class="view-order" (click)="openDetail(order)">
+                      عرض الطلب
+                      <i class="fa fa-arrow-left"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="mobile-orders-list">
+          <app-tea-loader
+            *ngIf="isLoading"
+            message="جاري تحضير الطلبات..."
+          ></app-tea-loader>
+
+          <div class="mobile-empty-state" *ngIf="!isLoading && !filteredOrders.length">
+            <span class="state-icon"><i class="fa fa-inbox"></i></span>
+            <strong>{{ searchQuery || statusFilter ? 'لا توجد نتائج مطابقة' : 'لا توجد طلبات جديدة' }}</strong>
+            <small>{{ searchQuery || statusFilter ? 'جرّب تغيير البحث أو الفلتر' : 'ستظهر الطلبات الواردة هنا تلقائياً' }}</small>
+          </div>
+
+          <article
+            class="mobile-order-card"
+            *ngFor="let order of (isLoading ? [] : filteredOrders); trackBy: trackById"
+          >
+            <header class="mobile-order-head">
+              <span class="mobile-order-number">#{{ order.id || order.orderNumber || '—' }}</span>
+              <span class="status-badge" [ngClass]="getStatusClass(getStatus(order))">
+                <i class="status-dot"></i>
+                {{ getStatusLabel(getStatus(order)) }}
+              </span>
+            </header>
+
+            <div class="mobile-customer-row">
+              <div class="mobile-customer">
+                <span class="customer-avatar">{{ getCustomerInitial(order) }}</span>
+                <span>
+                  <strong>{{ getCustomerName(order) }}</strong>
+                  <small>{{ order.customerEmail || order.email || 'عميل T4TEA' }}</small>
+                </span>
+              </div>
+              <div class="mobile-total">
+                <small>الإجمالي</small>
+                <strong>{{ getTotal(order) | number:'1.0-2' }} ج.م</strong>
+              </div>
+            </div>
+
+            <div class="mobile-order-meta">
+              <div>
+                <i class="fa fa-phone"></i>
+                <span>
+                  <small>التواصل</small>
+                  <strong>{{ getCustomerPhone(order) }}</strong>
+                </span>
+              </div>
+              <div>
+                <i class="fa fa-calendar-o"></i>
+                <span>
+                  <small>تاريخ الطلب</small>
+                  <strong>{{ getDate(order) }}</strong>
+                </span>
+              </div>
+            </div>
+
+            <button type="button" class="mobile-view-order" (click)="openDetail(order)">
+              <span>عرض تفاصيل الطلب</span>
+              <i class="fa fa-arrow-left"></i>
+            </button>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="custom-modal-overlay" *ngIf="isDetailOpen" (click)="closeDetail()">
+  <div class="custom-modal-content order-modal animate-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header-luxury">
+      <h3>تفاصيل الطلب #{{ selectedOrder?.id || selectedOrder?.orderNumber || '—' }}</h3>
+      <button class="btn-close-custom" (click)="closeDetail()">&times;</button>
+    </div>
+
+    <div class="modal-body-luxury" *ngIf="isDetailLoading">
+      <p class="empty-msg">جاري تحميل التفاصيل...</p>
+    </div>
+
+    <div class="modal-body-luxury" *ngIf="!isDetailLoading && selectedOrder">
+      <div class="detail-grid">
+        <div class="detail-card">
+          <span class="detail-label">العميل</span>
+          <span class="detail-value">{{ getCustomerName(selectedOrder) }}</span>
+        </div>
+        <div class="detail-card">
+          <span class="detail-label">الهاتف</span>
+          <span class="detail-value">{{ getCustomerPhone(selectedOrder) }}</span>
+        </div>
+        <div class="detail-card">
+          <span class="detail-label">التاريخ</span>
+          <span class="detail-value">{{ getDate(selectedOrder) }}</span>
+        </div>
+        <div class="detail-card">
+          <span class="detail-label">الإجمالي</span>
+          <span class="detail-value price">{{ getTotal(selectedOrder) | number:'1.0-2' }} ج.م</span>
+        </div>
+      </div>
+
+      <div class="field-wrapper mb-3 address-block" *ngIf="hasAddress(selectedOrder)">
+        <label class="form-label">العنوان</label>
+        <div class="address-card">
+          <div class="address-line" *ngFor="let part of getAddressParts(selectedOrder)">
+            <span class="address-label">{{ part.label }}</span>
+            <span class="address-value">{{ part.value }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-wrapper mb-3" *ngIf="selectedOrder.notes || selectedOrder['Notes']">
+        <label class="form-label">ملاحظات</label>
+        <p class="detail-text">{{ selectedOrder.notes || selectedOrder['Notes'] }}</p>
+      </div>
+
+      <div class="field-wrapper mb-3">
+        <label class="form-label">تحديث الحالة</label>
+        <select class="form-input-luxury" [(ngModel)]="selectedStatus">
+          <option *ngFor="let opt of updateStatusOptions" [ngValue]="opt.value">
+            {{ opt.label }}
+          </option>
+        </select>
+      </div>
+
+      <div class="items-block" *ngIf="getItems(selectedOrder).length">
+        <label class="form-label">أصناف الطلب</label>
+        <div class="items-list">
+          <div class="item-row" *ngFor="let item of getItems(selectedOrder)">
+            <div class="item-info">
+              <span class="item-name">{{ getItemName(item) }}</span>
+              <span class="item-meta">× {{ getItemQty(item) }}</span>
+            </div>
+            <span class="item-price">{{ getItemPrice(item) | number:'1.0-2' }} ج.م</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer-luxury" *ngIf="!isDetailLoading">
+      <button class="btn-save-luxury shadow-sm" (click)="saveStatus()" [disabled]="isUpdating || !canSaveStatus">
+        {{ isUpdating ? 'جاري التحديث...' : 'حفظ الحالة' }}
+      </button>
+      <button class="btn-cancel-luxury" (click)="closeDetail()" [disabled]="isUpdating">إغلاق</button>
+    </div>
+  </div>
+</div>

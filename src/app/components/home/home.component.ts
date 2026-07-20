@@ -18,6 +18,7 @@ import { TeawareCategoriesService } from '../../services/teaware-categories.serv
 import { SearchService } from '../../services/search.service';
 import { ApiResponseHelper } from '../../services/api-response.helper';
 import { ImageDropzoneComponent } from '../shared/image-dropzone/image-dropzone.component';
+import { TeaLoaderComponent } from '../shared/tea-loader/tea-loader.component';
 import {
   Category,
   Product,
@@ -44,7 +45,7 @@ interface DashboardItem {
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, ImageDropzoneComponent],
+  imports: [CommonModule, FormsModule, RouterModule, ImageDropzoneComponent, TeaLoaderComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
